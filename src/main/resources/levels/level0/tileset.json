@@ -1,0 +1,6 @@
+{
+  "file": "tilesets/terrain_atlas.png",
+  "uv_corner": "top_left",
+  "tile_size": 32,
+  "tile_load": "builtin/tilesplit"
+}

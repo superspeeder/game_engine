@@ -21,6 +21,8 @@ version '1.0'
 
 repositories {
     mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
 dependencies {
@@ -107,6 +109,8 @@ dependencies {
     implementation "org.joml:joml:1.9.25"
     implementation "com.code-disaster.steamworks4j:steamworks4j:1.8.0"
     implementation "com.code-disaster.steamworks4j:steamworks4j-server:1.8.0"
+
+    implementation "com.badlogicgames.ashley:ashley:1.7.3"
 
 }
 

@@ -1,0 +1,54 @@
+{
+  "builtin": {
+    "tilesplit": {
+      "class": "org.delusion.engine.resource.loaders.tileset.TileSplit",
+      "type": "resource.loaders.tileset",
+      "input": {
+        "tile_size": {
+          "type": "int",
+          "required": true
+        },
+        "uv_corner": {
+          "type": "enum.uvcorner",
+          "required": false,
+          "default": "bottom_left"
+        },
+        "file": {
+          "type": "internal_resource",
+          "required": true,
+          "base_dir": "textures"
+        }
+      },
+      "layer_static.csv": {
+        "type": "resource.loaders.level",
+        "class": "org.delusion.engine.resource.loaders.level.CSVLoader",
+        "input": {
+          "file": {
+            "type": "internal_resource",
+            "required": true,
+            "flags": ["DYNBASEDIR"],
+            "base_dir": ["levels","$levelname"]
+          }
+        },
+        "data": {
+          "batch_flags": ["STATIC"]
+        }
+      },
+      "layer_dynamic.json": {
+        "type": "resource.loaders.level",
+        "class": "org.delusion.engine.resource.loaders.level.JSONLoader",
+        "input": {
+          "file": {
+            "type": "internal_resource",
+            "required": true,
+            "flags": ["DYNBASEDIR"],
+            "base_dir": ["levels","$levelname"]
+          }
+        },
+        "data": {
+          "batch_flags": ["DYNAMIC"]
+        }
+      }
+    }
+  }
+}

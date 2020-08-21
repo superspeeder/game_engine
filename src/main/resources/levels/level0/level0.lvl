@@ -1,0 +1,22 @@
+{
+  "layers":{
+    "static": {
+      "file": "level0_static.json",
+      "loader": "builtin/layer_static.csv"
+    },
+    "dynamic": {
+      "file": "level0_dynamic.json",
+      "loader": "builtin/layer_dynamic.json"
+    }
+  },
+  "background": {
+    "type": "parallax",
+    "images": [
+      {
+        "z_order": 0,
+        ""
+      }
+    ]
+  },
+  "tileset_data": "tileset.json"
+}
