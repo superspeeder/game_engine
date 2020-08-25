@@ -1,11 +1,9 @@
 package org.delusion.engine.renderer.batch;
 
-import jdk.swing.interop.SwingInterOpUtils;
 import org.delusion.engine.renderer.Vertex;
 import org.delusion.engine.renderer.scene.Quad;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
@@ -67,11 +65,7 @@ public class BatchChunk {
                     Vertex[] qVert = q.getVert();
                     int index = VERTEX_SIZE * i * qVert.length;
                     for (Vertex v : qVert) {
-//                        System.out.println("positionVertex = " + positionVertex);
                         Vector4f transformed = model.transform(v.xyzw);
-//                        System.out.println("transformed = " + transformed);
-//                        System.out.println("v.uv = " + v.uv);
-//                        System.out.println("v.xyzw = " + v.xyzw);
                         placeVertex(index, transformed,v.uv);
 
                         index += VERTEX_SIZE;
@@ -90,13 +84,8 @@ public class BatchChunk {
                     Vertex[] qVert = q.getVert();
                     int index = VERTEX_SIZE * i * qVert.length;
                     if (index >= vertices.size()) {
-//                        System.out.println("Append " + q);
                         for (Vertex v : qVert) {
-//                            System.out.println("positionVertex = " + positionVertex);
                             Vector4f transformed = model.transform(new Vector4f(v.xyzw));
-//                            System.out.println("transformed = " + transformed);
-//                            System.out.println("v.uv = " + v.uv);
-//                            System.out.println("v.xyzw = " + v.xyzw);
                             appendVertex(index, transformed, q, v.uv);
 
                             index += VERTEX_SIZE;

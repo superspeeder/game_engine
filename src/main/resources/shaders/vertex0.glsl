@@ -6,6 +6,7 @@ layout(location=1) in vec2 uv_;
 
 
 out vec2 uv;
+out vec2 wpos;
 uniform mat4 mvp;
 
 void main() {
@@ -16,4 +17,5 @@ void main() {
 //    gl_Position = vec4(x, y+0.5f, z, 0.0f);
     gl_Position = mvp * pos;
     uv = uv_;
+    wpos = pos.xy;
 }

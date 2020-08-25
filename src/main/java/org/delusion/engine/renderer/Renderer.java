@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL46.*;
 public class Renderer {
     private static boolean trackingBGcolor;
     private static Color bgColor;
+    private static boolean wireframe = false;
 
     public static void setBackgroundColor(Color color, boolean listenAndStore) {
         if (bgColor != null && trackingBGcolor) {
@@ -46,7 +47,7 @@ public class Renderer {
     }
 
     public static void drawArraysTris_lowlevel(int first, int count) {
-        drawArrays_lowlevel(GL_TRIANGLES,first,count);
+        drawArrays_lowlevel(GL_TRIANGLES, first, count);
     }
 
     public static void drawVBO(int mode, VertexBuffer vbo) {
@@ -54,6 +55,15 @@ public class Renderer {
     }
 
     public static void drawVAOArray(int mode, VertexArray vao, int n) {
+
+    }
+
+    public static void wireframe(boolean b) {
+        wireframe = b;
+    }
+
+    public static boolean isWireframe() {
+        return wireframe;
 
     }
 

@@ -1,5 +1,7 @@
 package org.delusion.engine.window;
 
+import org.lwjgl.glfw.GLFWVidMode;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class WindowSettings {
@@ -129,6 +131,18 @@ public class WindowSettings {
 
     public int getHeight() {
         return window_height;
+    }
+
+    public void makeFullscreenSize() {
+        long monitor = glfwGetPrimaryMonitor();
+        GLFWVidMode vidMode = glfwGetVideoMode(monitor);
+
+        window_width = vidMode.width();
+        window_height = vidMode.height();
+    }
+
+    public void debugMode(boolean debugMode) {
+        opengl_debug_context = debugMode;
     }
 
     public enum GLProfile {

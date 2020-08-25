@@ -41,7 +41,9 @@ public class ShaderProgram {
         System.out.println("======================================");
         System.out.println("Shader Type: " + type.name());
         System.out.println("Compile Status: " + (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE ? true : false));
-        System.out.println(glGetShaderInfoLog(shader));
+        String ilog = glGetShaderInfoLog(shader);
+        if (!ilog.isEmpty())
+            System.out.println(ilog);
 
         return shader;
     }
@@ -89,6 +91,7 @@ public class ShaderProgram {
             uniformMap.put(name,i);
 
         }
+        System.out.println("======================================");
 
         System.out.println(glGetProgramInfoLog(programID));
     }
@@ -446,4 +449,5 @@ public class ShaderProgram {
                 return Integer.toString(i);
         }
     }
+
 }

@@ -9,5 +9,9 @@ public class GlUtils {
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         GLUtil.setupDebugMessageCallback();
+
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION,
+                new int[0], false);
+
     }
 }

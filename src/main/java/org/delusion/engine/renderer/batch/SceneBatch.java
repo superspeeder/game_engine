@@ -43,10 +43,18 @@ public class SceneBatch {
         vbo.unbind();
     }
 
+    public static void updateAndDraw(SceneBatch... batches) {
+        for (SceneBatch sb : batches) {
+            sb.update();
+        }
+        for (SceneBatch sb : batches) {
+            sb.draw();
+        }
+    }
+
     public void update() {
         if (dirty) {
-//            System.out.println("======================================");
-//            System.out.println("Dirty");
+
             int i = 0;
             int totalSize = 0;
             float[] verticies = new float[0];
@@ -55,8 +63,7 @@ public class SceneBatch {
                 if (chunk.isDirty()) {
                     chunk.clean();
                 }
-//                System.out.println("chunk.vertices = " + chunk.vertices);
-//                System.out.println("chunk.objects = " + chunk.objects);
+
                 if (chunk.vertices.isEmpty()) {
                     chunks.remove(chunk);
                     continue;
@@ -67,26 +74,11 @@ public class SceneBatch {
                 i++;
             }
 
-//            System.out.println("verticies = [");
-//            for (int n = 0; n < verticies.length ; n += BatchChunk.VERTEX_SIZE) {
-//                for (int j = n; j < n + BatchChunk.VERTEX_SIZE ; j++) {
-//                    System.out.print(verticies[j] + ", ");
-//                }
-//                System.out.println("");
-//            }
-//            System.out.println("]");
-//            System.out.println("totalSize = " + totalSize);
-//            System.out.println("last_verticies_len = " + last_verticies_len);
-
-            System.out.println("verticies.length / 6 = " + verticies.length / 6);
-
             if (verticies.length != last_verticies_len) {
-                System.out.println("Setting Buffer");
                 vbo.bind();
                 vbo.setData(verticies,GL_DYNAMIC_DRAW);
                 vbo.unbind();
             } else {
-                System.out.println("Updating Buffer");
                 vbo.bind();
                 vbo.updateAllData(verticies);
                 vbo.unbind();
@@ -110,11 +102,9 @@ public class SceneBatch {
         return out;
     }
 
-    private float[] buffer;
-
     public void batchQuad(Quad quad) {
         dirty = true;
-//        System.out.println("Batching " + quad);
+
         for (BatchChunk chunk : chunks) {
             if (!chunk.isFull()) {
                 quad.setChunk(chunk);

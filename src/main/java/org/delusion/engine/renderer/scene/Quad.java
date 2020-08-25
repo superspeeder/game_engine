@@ -65,7 +65,8 @@ public class Quad {
 
     public void markDirty() {
         dirty = true;
-        chunk.markDirty();
+        if (chunk != null)
+            chunk.markDirty();
     }
 
     public void clean() {
@@ -131,5 +132,13 @@ public class Quad {
             f[i++] = vertex.uv.y;
         }
         return f;
+    }
+
+    public void setUVs(Vector4f uvs) {
+        u1 = uvs.x;
+        u2 = uvs.z;
+        v1 = uvs.y;
+        v2 = uvs.w;
+        markDirty();
     }
 }

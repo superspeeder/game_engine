@@ -79,8 +79,7 @@ public class Texture2D {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.filter_mode_mag);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, this.data);
-        System.out.println("this.data = " + this.data);
-        
+
         STBImage.stbi_image_free(this.data);
         glBindTexture(GL_TEXTURE_2D,0);
     }

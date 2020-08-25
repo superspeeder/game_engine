@@ -1,6 +1,7 @@
 package org.delusion.engine.window;
 
 import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.GL;
 
 import java.nio.DoubleBuffer;
 
@@ -10,6 +11,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
 
     private long window;
+
+    private double last_frame_time = 0;
+    private double time = 0;
+    private double dt = 0;
+
 
     public Window(WindowSettings settings) {
 
@@ -104,6 +110,7 @@ public class Window {
 
     public void makeContextCurrent() {
         glfwMakeContextCurrent(window);
+        GL.createCapabilities();
     }
 
     public boolean shouldClose() {
@@ -112,6 +119,9 @@ public class Window {
 
     public void swapBuffers() {
         glfwSwapBuffers(window);
+        last_frame_time = time;
+        time = getTime();
+        dt = time - last_frame_time;
     }
 
     public int getWidth() {
@@ -133,5 +143,18 @@ public class Window {
         glfwGetCursorPos(window,x,y);
         x.rewind();
         y.rewind();
+    }
+
+    public void swapInterval(int n) {
+        glfwSwapInterval(n);
+    }
+
+    public double getDelta() {
+        return dt;
+    }
+
+    public void update() {
+        WindowUtils.pollEvents();
+        swapBuffers();
     }
 }
