@@ -36,8 +36,7 @@ public class Camera {
     }
 
     public void setPosition(Vector2f position) {
-        position.set(position);
-        System.out.println("sp"+ position);
+        this.position.set(position);
         markDirty();
     }
 
@@ -55,7 +54,6 @@ public class Camera {
 
     public void translate(double x, double y) {
         position.set(position.x+x,position.y+y);
-        System.out.println("t" + position);
         markDirty();
     }
 
@@ -94,5 +92,9 @@ public class Camera {
 
     public Vector2f getCenter() {
         return new Vector2f(width/2f,height/2f);
+    }
+
+    public Vector2f getPosition() {
+        return new Vector2f(position);
     }
 }

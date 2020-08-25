@@ -76,20 +76,20 @@ public class Scene {
     }
 
     public boolean rectCollide(Rectanglef boundingBox) {
-        int min_tx = (int) (boundingBox.minX / tx);
-        int max_tx = (int) (boundingBox.maxX / tx);
-        int min_ty = (int) (boundingBox.minY / ty);
-        int max_ty = (int) (boundingBox.maxY / ty);
-        if (min_tx == 0 && boundingBox.minX < 0) {
+        int min_tx = (int) ((boundingBox.minX + 1) / tx);
+        int max_tx = (int) ((boundingBox.maxX - 1) / tx);
+        int min_ty = (int) ((boundingBox.minY + 1) / ty);
+        int max_ty = (int) ((boundingBox.maxY - 1) / ty);
+        if (min_tx == 0 && boundingBox.minX <= 0) {
             min_tx = -1;
         }
-        if (min_ty == 0 && boundingBox.minY < 0) {
+        if (min_ty == 0 && boundingBox.minY <= 0) {
             min_ty = -1;
         }
-        if (max_tx == 0 && boundingBox.maxX < 0) {
+        if (max_tx == 0 && boundingBox.maxX <= 0) {
             max_tx = -1;
         }
-        if (max_ty == 0 && boundingBox.maxY < 0) {
+        if (max_ty == 0 && boundingBox.maxY <= 0) {
             max_ty = -1;
         }
 
@@ -103,25 +103,25 @@ public class Scene {
     }
 
     public List<Vector2i> getCollisions(Rectanglef boundingBox) {
-        int min_tx = (int) (boundingBox.minX / tx);
-        int max_tx = (int) (boundingBox.maxX / tx);
-        int min_ty = (int) (boundingBox.minY / ty);
-        int max_ty = (int) (boundingBox.maxY / ty);
-        if (min_tx == 0 && boundingBox.minX < 0) {
+        float min_tx = (boundingBox.minX + 1) / tx;
+        float max_tx = (boundingBox.maxX - 1) / tx;
+        float min_ty = (boundingBox.minY + 1) / ty;
+        float max_ty = (boundingBox.maxY - 1) / ty;
+        if ((int)min_tx == 0 && boundingBox.minX <= 0) {
             min_tx = -1;
         }
-        if (min_ty == 0 && boundingBox.minY < 0) {
+        if ((int)min_ty == 0 && boundingBox.minY <= 0) {
             min_ty = -1;
         }
-        if (max_tx == 0 && boundingBox.maxX < 0) {
+        if ((int)max_tx == 0 && boundingBox.maxX <= 0) {
             max_tx = -1;
         }
-        if (max_ty == 0 && boundingBox.maxY < 0) {
+        if ((int)max_ty == 0 && boundingBox.maxY <= 0) {
             max_ty = -1;
         }
 
-//        System.out.println("boundingBox = " + boundingBox);
-//        System.out.println(min_tx + ", " + min_ty + " ,, " + max_tx + ", " + max_ty);
+        System.out.println("boundingBox = " + boundingBox);
+        System.out.println(min_tx + ", " + min_ty + " ,, " + max_tx + ", " + max_ty);
 
         boolean t_nxny = getCollides(min_tx,min_ty);
         boolean t_mxny = getCollides(max_tx,min_ty);
@@ -130,18 +130,26 @@ public class Scene {
 
         List<Vector2i> tilesC = new ArrayList<>();
         if (t_nxny) {
-            tilesC.add(new Vector2i(min_tx,min_ty));
+            tilesC.add(new Vector2i(min_tx*tx,min_ty*ty));
         }
         if (t_mxny) {
-            tilesC.add(new Vector2i(max_tx, min_ty));
+            tilesC.add(new Vector2i(max_tx*tx, min_ty*ty));
         }
         if (t_nxmy) {
-            tilesC.add(new Vector2i(min_tx,max_ty));
+            tilesC.add(new Vector2i(min_tx*tx,max_ty*ty));
         }
         if (t_mxmy) {
-            tilesC.add(new Vector2i(max_tx,max_ty));
+            tilesC.add(new Vector2i(max_tx*tx,max_ty*ty));
         }
 
         return tilesC;
+    }
+
+    public int getTX() {
+        return tx;
+    }
+
+    public int getTY() {
+        return ty;
     }
 }

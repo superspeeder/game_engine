@@ -11,6 +11,7 @@ import org.delusion.engine.sprite.Sprite;
 import org.joml.*;
 
 import java.lang.Math;
+import java.util.Arrays;
 import java.util.List;
 
 // Author andy
@@ -19,10 +20,12 @@ public class Player extends Sprite implements CameraController, InputHandler {
     private static final Vector2f SIZE = new Vector2f(32,32);
     private Matrix4f modelMat = new Matrix4f();
     private Quad quad = new Quad(new Vector3f(0,0,0), new Vector3f(1,1,1),new Vector4f(0,0,1,1));
+    private Vector2f origin;
 
     public Player(Vector4f startingUVs, Vector2f position) {
         super(position);
         quad.setUVs(startingUVs);
+        origin = new Vector2f(position);
         System.out.println("position = " + position);
         modelMat
                 .translate(position.x,position.y,0)
@@ -40,57 +43,85 @@ public class Player extends Sprite implements CameraController, InputHandler {
 
         position.add(delta.x,0);
 
-        if (scene.rectCollide(getBoundingBox())) {
+        if (scene.rectCollide(getBoundingBox()) && delta.x != 0) {
             System.out.println("E x");
+            List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
             if (delta.x > 0) { // going right
-                List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
-                int max_c_x = (int) position.x;
+                System.out.println("R");
+                System.out.println("position = " + position);
+                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+                int max_c_x = collidingTiles.get(0).x;
+                Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
                     if (collidingTile.x < max_c_x) {
                         max_c_x = collidingTile.x;
+                        t = collidingTile;
                     }
                 }
+                System.out.println("max_c_x = " + max_c_x);
+                System.out.println("bbox = " + getBoundingBox());
                 position.set(max_c_x - getSize().x,position.y);
             } else if (delta.x < 0) { // going left
-                List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
-                int max_c_x = (int) position.x;
+                System.out.println("L");
+                System.out.println("position = " + position);
+                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+                int max_c_x = collidingTiles.get(0).x;
+                Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
                     if (collidingTile.x > max_c_x) {
                         max_c_x = collidingTile.x;
+                        t = collidingTile;
                     }
                 }
-                position.set(max_c_x,position.y);
+                System.out.println("max_c_x = " + max_c_x);
+                System.out.println("bbox = " + getBoundingBox());
+                position.set(max_c_x + scene.getTX(),position.y);
             }
         }
 
 
         position.add(0,delta.y);
 
-        if (scene.rectCollide(getBoundingBox())) {
+        if (scene.rectCollide(getBoundingBox()) && delta.y != 0) {
+            List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
             System.out.println("E y");
-            if (delta.y > 0) { // going right
-                List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
-                int max_c_y = (int) position.y;
+            if (delta.y > 0) { // going up
+                System.out.println("U");
+                System.out.println("position = " + position);
+                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+                int max_c_y = collidingTiles.get(0).y;
+                Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
                     if (collidingTile.y < max_c_y) {
                         max_c_y = collidingTile.y;
+                        t = collidingTile;
                     }
                 }
+                System.out.println("max_c_y = " + max_c_y);
+                System.out.println("bbox = " + getBoundingBox());
                 position.set(position.x,max_c_y - getSize().y);
-            } else if (delta.y < 0) { // going left
-                List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
-                int max_c_y = (int) position.y;
+            } else if (delta.y < 0) { // going down
+                System.out.println("D");
+                System.out.println("position = " + position);
+                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+                int max_c_y = collidingTiles.get(0).y;
+                Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
                     if (collidingTile.y > max_c_y) {
                         max_c_y = collidingTile.y;
+                        t = collidingTile;
                     }
                 }
-                position.set(position.x,max_c_y);
+                System.out.println("max_c_y = " + max_c_y);
+                System.out.println("bbox = " + getBoundingBox());
+
+                position.set(position.x,max_c_y + scene.getTY());
             }
         }
 
 
-        camera.setPosition(position);
+        camera.setPosition(new Vector2f(position).sub(origin).mul(-1));
+        camera.update();
 
 
 

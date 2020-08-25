@@ -141,8 +141,6 @@ public class TestApp {
                 camera.markDirty();
             }
 
-            camera.translate(1,0);
-
             camera.update();
 //
 //            if (scene.rectCollide(playerCharacter.getBoundingBox())) {
@@ -270,6 +268,6 @@ public class TestApp {
 
         staticBatch.update();
         dynamicBatch.update();
-        scene.addCollidersRect(new Vector2i(0,-3), new Vector2i(26,5));
+        scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(26,5));
     } // Level creation
 }
