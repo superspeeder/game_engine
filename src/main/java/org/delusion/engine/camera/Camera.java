@@ -42,13 +42,13 @@ public class Camera {
 
     public void translate(Vector2f translation) {
         position.set(position.x+translation.x,position.y+translation.y);
-        System.out.println(position);
+//        System.out.println(position);
         markDirty();
     }
 
     public void setPosition(float x, float y) {
         position.set(x,y);
-        System.out.println(position);
+//        System.out.println(position);
         markDirty();
     }
 

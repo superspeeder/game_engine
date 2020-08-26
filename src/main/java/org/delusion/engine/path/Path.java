@@ -46,13 +46,13 @@ public class Path {
             position -= end;
         }
         int pointVal = (int) Math.floor(position);
-        System.out.println("pointVal = " + pointVal + ", " + (pathPoints.size() - 1));
+//        System.out.println("pointVal = " + pointVal + ", " + (pathPoints.size() - 1));
         if (pathPoints.size() - 1 > pointVal) {
             PathPoint point = pathPoints.get(pointVal);
             PathPoint next = pathPoints.get(pointVal + 1);
 
             float partial = position - pointVal;
-            System.out.println("partial = " + partial);
+//            System.out.println("partial = " + partial);
 
             location = lerpPoints(point, next, partial);
 

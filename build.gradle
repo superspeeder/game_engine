@@ -116,3 +116,13 @@ dependencies {
 }
 
 mainClassName = 'org.delusion.engine.TestApp'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.delusion.engine.TestApp'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

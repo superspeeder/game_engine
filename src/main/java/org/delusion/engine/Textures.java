@@ -13,7 +13,7 @@ public class Textures {
     public static void setup() throws IOException {
         STBImage.stbi_set_flip_vertically_on_load(true);
 
-        MAIN_TS = new Texture2D("textures/tilesets/Atlas/terrain_atlas.png", new Texture2D.TextureSettings());
+        MAIN_TS = new Texture2D("textures/tilesets/Atlas/base_out_atlas.png", new Texture2D.TextureSettings());
         PLAYER = new Texture2D("textures/entity/character/player.png", new Texture2D.TextureSettings());
     }
 }

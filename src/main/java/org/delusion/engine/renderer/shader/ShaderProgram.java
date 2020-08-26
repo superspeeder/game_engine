@@ -1,5 +1,6 @@
 package org.delusion.engine.renderer.shader;
 
+import org.delusion.engine.resources.ResourceUtils;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
@@ -18,7 +19,7 @@ public class ShaderProgram {
     private int programID;
 
     public int readShaderFile(String path) throws IOException {
-        String content = Files.readString(Path.of(path));
+        String content = ResourceUtils.readString(path);
         List<String> lines = content.lines().collect(Collectors.toList());
         String line0 = lines.get(0);
         ShaderType type = ShaderType.from(line0);

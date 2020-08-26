@@ -10,6 +10,7 @@ import org.delusion.engine.scene.Scene;
 import org.delusion.engine.sprite.Sprite;
 import org.joml.*;
 
+import java.awt.*;
 import java.lang.Math;
 import java.util.Arrays;
 import java.util.List;
@@ -21,12 +22,14 @@ public class Player extends Sprite implements CameraController, InputHandler {
     private Matrix4f modelMat = new Matrix4f();
     private Quad quad = new Quad(new Vector3f(0,0,0), new Vector3f(1,1,1),new Vector4f(0,0,1,1));
     private Vector2f origin;
+    private Vector2f delta = new Vector2f();
+    private boolean onGround;
 
     public Player(Vector4f startingUVs, Vector2f position) {
         super(position);
         quad.setUVs(startingUVs);
         origin = new Vector2f(position);
-        System.out.println("position = " + position);
+//        System.out.println("position = " + position);
         modelMat
                 .translate(position.x,position.y,0)
                 .scale(SIZE.x,SIZE.y,1)
@@ -39,17 +42,38 @@ public class Player extends Sprite implements CameraController, InputHandler {
 
     }
 
-    public void move(Vector2f delta, Scene scene, Camera camera) {
+    private float yv = 0;
+    private float G = -1.2f;
+    private float LOWER_MAX = -24f;
+    private float UPPER_MAX = 24f;
+    private float JS = 31f;
+
+    public void jump() {
+        if (onGround) {
+            yv += JS;
+        }
+    }
+
+    public void move(Vector2f d) {
+        delta.add(d);
+    }
+
+
+    public void update(Scene scene, Camera camera) {
+
+        yv += G;
+        yv = Float.max(yv,LOWER_MAX);
+        yv = Float.min(yv,UPPER_MAX);
+        delta.add(0,yv);
 
         position.add(delta.x,0);
+        onGround = false;
 
         if (scene.rectCollide(getBoundingBox()) && delta.x != 0) {
-            System.out.println("E x");
+
             List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
             if (delta.x > 0) { // going right
-                System.out.println("R");
-                System.out.println("position = " + position);
-                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+
                 int max_c_x = collidingTiles.get(0).x;
                 Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
@@ -58,13 +82,10 @@ public class Player extends Sprite implements CameraController, InputHandler {
                         t = collidingTile;
                     }
                 }
-                System.out.println("max_c_x = " + max_c_x);
-                System.out.println("bbox = " + getBoundingBox());
+
                 position.set(max_c_x - getSize().x,position.y);
             } else if (delta.x < 0) { // going left
-                System.out.println("L");
-                System.out.println("position = " + position);
-                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+
                 int max_c_x = collidingTiles.get(0).x;
                 Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
@@ -73,8 +94,7 @@ public class Player extends Sprite implements CameraController, InputHandler {
                         t = collidingTile;
                     }
                 }
-                System.out.println("max_c_x = " + max_c_x);
-                System.out.println("bbox = " + getBoundingBox());
+
                 position.set(max_c_x + scene.getTX(),position.y);
             }
         }
@@ -84,11 +104,9 @@ public class Player extends Sprite implements CameraController, InputHandler {
 
         if (scene.rectCollide(getBoundingBox()) && delta.y != 0) {
             List<Vector2i> collidingTiles = scene.getCollisions(getBoundingBox());
-            System.out.println("E y");
+
             if (delta.y > 0) { // going up
-                System.out.println("U");
-                System.out.println("position = " + position);
-                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+
                 int max_c_y = collidingTiles.get(0).y;
                 Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
@@ -97,13 +115,11 @@ public class Player extends Sprite implements CameraController, InputHandler {
                         t = collidingTile;
                     }
                 }
-                System.out.println("max_c_y = " + max_c_y);
-                System.out.println("bbox = " + getBoundingBox());
+                yv = 0;
+
                 position.set(position.x,max_c_y - getSize().y);
             } else if (delta.y < 0) { // going down
-                System.out.println("D");
-                System.out.println("position = " + position);
-                System.out.println("collidingTiles = " + Arrays.toString(collidingTiles.toArray()));
+
                 int max_c_y = collidingTiles.get(0).y;
                 Vector2i t;
                 for (Vector2i collidingTile : collidingTiles) {
@@ -112,8 +128,10 @@ public class Player extends Sprite implements CameraController, InputHandler {
                         t = collidingTile;
                     }
                 }
-                System.out.println("max_c_y = " + max_c_y);
-                System.out.println("bbox = " + getBoundingBox());
+
+                onGround = true;
+                yv = 0;
+
 
                 position.set(position.x,max_c_y + scene.getTY());
             }
@@ -123,7 +141,7 @@ public class Player extends Sprite implements CameraController, InputHandler {
         camera.setPosition(new Vector2f(position).sub(origin).mul(-1));
         camera.update();
 
-
+        delta.set(0,0);
 
     }
 

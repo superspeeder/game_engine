@@ -72,8 +72,8 @@ public class TestApp {
 
             // Shader Program
             program = new ShaderProgram(
-                    "src/main/resources/shaders/vertex0.glsl",
-                    "src/main/resources/shaders/fragment0.glsl");
+                    "shaders/vertex0.glsl",
+                    "shaders/fragment0.glsl");
 
             // Scene
             loadSceneResources();
@@ -108,7 +108,7 @@ public class TestApp {
 
         }
 
-        Renderer.wireframe(true);
+//        Renderer.wireframe(true);
 
 
 
@@ -125,30 +125,15 @@ public class TestApp {
 
             // Get Cursor Position
             window.getCursorPos(x,y);
-//            Vector2f e = camera.unproject(new Vector2f((float)x.get(),window.getHeight() - (float)y.get()));
-//            x.rewind();
-//            y.rewind();
-//            if (scene.pointcollide((int)e.x,(int)e.y)) {
-//                BackgroundColor.set(1.f,0.f,0.f,0.f);
-//            } else {
-//                BackgroundColor.set(0.0f, 1.f,0.f,0.f);
-//
-//            }
+
             // Camera
             if (CameraMover.dx != 0 || CameraMover.dy != 0) {
 
-                playerCharacter.move(new Vector2f((float)(CameraMover.dx * window.getDelta()), (float)(CameraMover.dy * window.getDelta())).mul(-1), scene, camera);
+                playerCharacter.move(new Vector2f((float)(CameraMover.dx * window.getDelta()), 0).mul(-1));
                 camera.markDirty();
             }
 
-            camera.update();
-//
-//            if (scene.rectCollide(playerCharacter.getBoundingBox())) {
-//                BackgroundColor.set(1.f,0.f,0.f,0.f);
-//            } else {
-//                BackgroundColor.set(0.0f, 1.f,0.f,0.f);
-//
-//            }
+            playerCharacter.update(scene, camera);
 
 
 
@@ -234,40 +219,38 @@ public class TestApp {
 
     public static void buildScene() {
         scene = new Scene(32,32);
-        staticBatch.batchQuad(new Quad(0, 128, 32, 32, Textures.MAIN_TS.uvs(0, 0, 32, 32)));
-        staticBatch.batchQuad(new Quad(0, 0, 32, 32, Textures.MAIN_TS.uvs(0, 64, 32, 96)));
-        staticBatch.batchQuad(new Quad(800, 128, 32, 32, Textures.MAIN_TS.uvs(64, 0, 96, 32)));
-        staticBatch.batchQuad(new Quad(800, 0, 32, 32, Textures.MAIN_TS.uvs(64, 64, 96, 96)));
 
-        staticBatch.tiledQuadBatch(new Vector2f(32, 128), new Vector2f(24, 1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(32, 0, 64, 32));
-        staticBatch.tiledQuadBatch(new Vector2f(32, 0), new Vector2f(24, 1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(32, 64, 64, 96));
+        // Main Floor
+        staticBatch.batchQuad(new Quad(0, 128, 32, 32, Textures.MAIN_TS.uvs(96, 416, 128, 448)));
+        staticBatch.batchQuad(new Quad(0, -128, 32, 32, Textures.MAIN_TS.uvs(96, 448, 128, 480)));
+        staticBatch.batchQuad(new Quad(1920, 128, 32, 32, Textures.MAIN_TS.uvs(160, 416, 192, 448)));
+        staticBatch.batchQuad(new Quad(1920, -128, 32, 32, Textures.MAIN_TS.uvs(160, 448, 192, 480)));
 
-        staticBatch.tiledQuadBatch(new Vector2f(0, 32), new Vector2f(1, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(0, 32, 32, 64));
-        staticBatch.tiledQuadBatch(new Vector2f(800, 32), new Vector2f(1, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(64, 32, 96, 64));
+        staticBatch.tiledQuadBatch(new Vector2f(32, 128), new Vector2f(59, 1), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(128, 416, 160, 448));
+        staticBatch.tiledQuadBatch(new Vector2f(32, -128), new Vector2f(59, 1), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(128, 448, 160, 480));
 
-        staticBatch.tiledQuadBatch(new Vector2f(32, 32), new Vector2f(24, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(32, 32, 64, 64));
+        staticBatch.tiledQuadBatch(new Vector2f(0, -96), new Vector2f(1, 7), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(96, 480, 128, 512));
+        staticBatch.tiledQuadBatch(new Vector2f(1920, -96), new Vector2f(1, 7), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(160, 480, 192, 512));
 
-        staticBatch.tiledQuadBatch(new Vector2f(0, -96), new Vector2f(1, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(0, 96, 32, 128));
-        staticBatch.tiledQuadBatch(new Vector2f(800, -96), new Vector2f(1, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(64, 96, 96, 128));
+        staticBatch.tiledQuadBatch(new Vector2f(32, -96), new Vector2f(59, 7), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(128, 480, 160, 512));
 
-        staticBatch.batchQuad(new Quad(0, -128, 32, 32, Textures.MAIN_TS.uvs(0, 128, 32, 160)));
-        staticBatch.batchQuad(new Quad(800, -128, 32, 32, Textures.MAIN_TS.uvs(64, 128, 96, 160)));
+        // Platform
+        staticBatch.batchQuad(new Quad(128, 256, 32, 32, Textures.MAIN_TS.uvs(96, 384, 128, 416)));
+        staticBatch.tiledQuadBatch(new Vector2f(160,256), new Vector2f(3,1), new Vector2f(32, 32),
+                Textures.MAIN_TS.uvs(128, 384, 160, 416));
 
-        staticBatch.tiledQuadBatch(new Vector2f(32, -96), new Vector2f(24, 3), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(32, 96, 64, 128));
+        staticBatch.batchQuad(new Quad(256, 256, 32, 32, Textures.MAIN_TS.uvs(160, 384, 192, 416)));
 
-        staticBatch.tiledQuadBatch(new Vector2f(32, -128), new Vector2f(24, 1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(32, 128, 64, 160));
+
 
         staticBatch.update();
         dynamicBatch.update();
-        scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(26,5));
+        scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(60,4));
+        scene.addCollidersRect(new Vector2i(4,8), new Vector2i(8,8));
     } // Level creation
 }
