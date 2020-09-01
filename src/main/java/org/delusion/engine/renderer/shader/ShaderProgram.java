@@ -22,7 +22,9 @@ public class ShaderProgram {
         String content = ResourceUtils.readString(path);
         List<String> lines = content.lines().collect(Collectors.toList());
         String line0 = lines.get(0);
+        String line1 = lines.get(1);
         ShaderType type = ShaderType.from(line0);
+
 
         StringBuilder shadercode_builder = new StringBuilder();
         for (List<String> strings : Arrays.asList(lines.subList(1, lines.size()))) {
@@ -41,6 +43,7 @@ public class ShaderProgram {
 
         System.out.println("======================================");
         System.out.println("Shader Type: " + type.name());
+        System.out.println("Shader Version: " + line1.substring(9).toUpperCase());
         System.out.println("Compile Status: " + (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE ? true : false));
         String ilog = glGetShaderInfoLog(shader);
         if (!ilog.isEmpty())

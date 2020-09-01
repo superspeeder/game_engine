@@ -8,8 +8,8 @@ public class WindowSettings {
 
     public int glProfile = GLFW_OPENGL_ANY_PROFILE;
 
-    public int contextVersionMajor = 4;
-    public int contextVersionMinor = 6;
+    public int contextVersionMajor = 3;
+    public int contextVersionMinor = 3;
     public boolean resizable = false;
     public boolean visible = true;
     public boolean decorated = true;

@@ -62,7 +62,7 @@ public class TestApp {
             window.swapInterval(1);
 
             // Enable Debug Mode
-            GlUtils.enableDebug();
+//            GlUtils.enableDebug();
 
             // Background Colors
             BackgroundColor = new Color(1, 1, 1, 1);
@@ -117,7 +117,7 @@ public class TestApp {
         DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
-        // Event Handlers
+         // Event Handlers
         window.setKeyCallback(new KeyCallback());
 
         // Gameloop

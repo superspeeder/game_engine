@@ -19,6 +19,11 @@ public class Window {
 
     public Window(WindowSettings settings) {
 
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+        System.out.println(glfwGetVersionString());
+
+
         if (settings.isFullscreen()) {
             if (settings.isFullscreenWindowed()) {
                 settings.apply();
@@ -38,7 +43,12 @@ public class Window {
 
             }
         } else {
+            settings.apply();
             window = glfwCreateWindow(settings.getWidth(), settings.getHeight(), settings.caption, NULL, NULL);
+        }
+
+        if (window == NULL) {
+            throw new IllegalStateException("Window couldn't be created");
         }
 
     }

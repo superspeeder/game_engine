@@ -14,8 +14,6 @@ public class ResourceUtils {
     public static String readString(String path) {
         InputStream inputStream = ResourceUtils.class.getClassLoader().getResourceAsStream(path);
 
-        System.out.println("inputStream = " + inputStream);
-
         String text = new BufferedReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8))
 	        .lines()

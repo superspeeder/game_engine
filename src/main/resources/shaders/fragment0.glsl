@@ -1,8 +1,10 @@
 #type fragment
-#version 460 core
+#version 330 core
 
 in vec2 uv;
 in vec2 wpos;
+
+out vec4 fragColor;
 
 uniform sampler2D texture_;
 
@@ -23,8 +25,8 @@ vec4 invertOrBlack(vec4 c) {
 
 void main() {
     if (outline == 0) {
-        gl_FragColor = texture(texture_, uv);
+        fragColor = texture(texture_, uv);
     } else {
-        gl_FragColor = invertOrBlack(texture(texture_, uv));
+        fragColor = invertOrBlack(texture(texture_, uv));
     }
 }
