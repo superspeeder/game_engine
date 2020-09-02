@@ -26,6 +26,17 @@ public class Tileset {
         tile_v = texture2D.getHeight()/(float)tile_size;
     }
 
+    public Tileset(int tile_size, Texture2D mainTs) {
+        this.tile_size = tile_size;
+        this.texture2D = mainTs;
+
+        tiles_per_row = texture2D.getWidth() / tile_size;
+        rows = (int)Math.ceil(texture2D.getHeight() / (float)tile_size);
+
+        tile_u = texture2D.getWidth()/(float)tile_size;
+        tile_v = texture2D.getHeight()/(float)tile_size;
+    }
+
     public Vector4f getTileUV(int id) {
         int row = id / tiles_per_row;
         int col = id % tiles_per_row;
@@ -33,8 +44,14 @@ public class Tileset {
             throw new IllegalArgumentException("ID is greater than max ids");
         }
 
-        float v = row*tile_v;
-        float u = col*tile_u;
-        return new Vector4f(u, v, u+tile_u, v+tile_v);
+        return texture2D.uvs(col*tile_size,row*tile_size,(col+1)*tile_size,(row+1)*tile_size);
+    }
+
+    public Texture2D getTexture() {
+        return texture2D;
+    }
+
+    public int getTS() {
+        return tile_size;
     }
 }

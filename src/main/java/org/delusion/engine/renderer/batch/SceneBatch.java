@@ -5,6 +5,7 @@ import org.delusion.engine.renderer.buffer.VertexArray;
 import org.delusion.engine.renderer.buffer.VertexBuffer;
 import org.delusion.engine.renderer.scene.Quad;
 import org.delusion.engine.renderer.texture.Texture2D;
+import org.delusion.engine.resources.Tileset;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -19,6 +20,8 @@ import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 
 public class SceneBatch {
 
+    private final Modes mode;
+    private Tileset tileset;
     private Texture2D texture;
 
     private List<BatchChunk> chunks = new ArrayList<>();
@@ -31,6 +34,25 @@ public class SceneBatch {
 
     public SceneBatch(Texture2D texture) {
         this.texture = texture;
+        vbo = new VertexBuffer(GL_DYNAMIC_DRAW, 4);
+        vao = new VertexArray();
+        vao.bind();
+        vbo.bind();
+        vao.pointer(0,4,GL_FLOAT,false,6 * Float.BYTES,0);
+        vao.enableAttr(0);
+        vao.pointer(1,2,GL_FLOAT,false,6 * Float.BYTES,4 * Float.BYTES);
+        vao.enableAttr(1);
+        vao.unbind();
+        vbo.unbind();
+
+        mode = Modes.TEXTURE;
+    }
+
+    public SceneBatch(Tileset tileset) {
+        mode = Modes.TILESET;
+        this.tileset = tileset;
+        this.texture = tileset.getTexture();
+
         vbo = new VertexBuffer(GL_DYNAMIC_DRAW, 4);
         vao = new VertexArray();
         vao.bind();
@@ -118,6 +140,11 @@ public class SceneBatch {
         chunks.add(chunk);
     }
 
+    public void batchTile(Vector2f pos, int id) {
+        Quad quad = new Quad(new Vector3f(pos.x * tileset.getTS(),pos.y*tileset.getTS(),1.0f),new Vector3f(tileset.getTS(),tileset.getTS(),1.0f),tileset.getTileUV(id));
+        batchQuad(quad);
+    }
+
     public void bindTex() {
         texture.bind(0);
     }
@@ -139,11 +166,16 @@ public class SceneBatch {
         for (int x = 0; x < tiles.x; x++) {
             for (int y = 0; y < tiles.y; y++) {
                 batchQuad(new Quad(
-                        new Vector3f(x * tilesize.x + pos.x, y * tilesize.y + pos.y, 1),
+                        new Vector3f(x * tilesize.x + pos.x * tilesize.x, y * tilesize.y + pos.y * tilesize.y, 1),
                         new Vector3f(tilesize.x, tilesize.y, 1),
                         uvs
                 ));
             }
         }
+    }
+
+    public void tiledTileBatch(Vector2f pos, Vector2f tiles, int id) {
+        tiledQuadBatch(pos,tiles,new Vector2f(tileset.getTS(),tileset.getTS()), tileset.getTileUV(id));
+
     }
 }

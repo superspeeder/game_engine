@@ -2,6 +2,7 @@ package org.delusion.engine;
 
 import org.delusion.engine.camera.Camera;
 import org.delusion.engine.color.ComplexGradientSeries;
+import org.delusion.engine.resources.Tileset;
 import org.delusion.engine.scene.Scene;
 import org.delusion.game.player.Player;
 import org.delusion.engine.renderer.batch.SceneBatch;
@@ -42,6 +43,7 @@ public class TestApp {
     public static long start;
     public static Player playerCharacter;
     public static Scene scene;
+    private static Tileset tileset;
 
     public static void main(String[] args) {
 
@@ -78,8 +80,8 @@ public class TestApp {
             // Scene
             loadSceneResources();
 
-            staticBatch = new SceneBatch(Textures.MAIN_TS);
-            dynamicBatch = new SceneBatch(Textures.MAIN_TS);
+            staticBatch = new SceneBatch(tileset);
+            dynamicBatch = new SceneBatch(tileset);
 
             buildScene();
             loadEntities();
@@ -211,6 +213,7 @@ public class TestApp {
     private static void loadSceneResources() {
         try {
             Textures.setup();
+            tileset = new Tileset(32, Textures.MAIN_TS);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -221,36 +224,31 @@ public class TestApp {
         scene = new Scene(32,32);
 
         // Main Floor
-        staticBatch.batchQuad(new Quad(0, 128, 32, 32, Textures.MAIN_TS.uvs(96, 416, 128, 448)));
-        staticBatch.batchQuad(new Quad(0, -128, 32, 32, Textures.MAIN_TS.uvs(96, 448, 128, 480)));
-        staticBatch.batchQuad(new Quad(1920, 128, 32, 32, Textures.MAIN_TS.uvs(160, 416, 192, 448)));
-        staticBatch.batchQuad(new Quad(1920, -128, 32, 32, Textures.MAIN_TS.uvs(160, 448, 192, 480)));
+        staticBatch.batchTile(new Vector2f(0,4), 0);
+        staticBatch.batchTile(new Vector2f(0, -4), 64);
+        staticBatch.batchTile(new Vector2f(60, 4), 2);
+        staticBatch.batchTile(new Vector2f(60, -4), 66);
 
-        staticBatch.tiledQuadBatch(new Vector2f(32, 128), new Vector2f(59, 1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(128, 416, 160, 448));
-        staticBatch.tiledQuadBatch(new Vector2f(32, -128), new Vector2f(59, 1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(128, 448, 160, 480));
+        staticBatch.tiledTileBatch(new Vector2f(1,4),new Vector2f(59,1), 1);
+        staticBatch.tiledTileBatch(new Vector2f(1,-4),new Vector2f(59,1), 65);
 
-        staticBatch.tiledQuadBatch(new Vector2f(0, -96), new Vector2f(1, 7), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(96, 480, 128, 512));
-        staticBatch.tiledQuadBatch(new Vector2f(1920, -96), new Vector2f(1, 7), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(160, 480, 192, 512));
-
-        staticBatch.tiledQuadBatch(new Vector2f(32, -96), new Vector2f(59, 7), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(128, 480, 160, 512));
-
-        // Platform
-        staticBatch.batchQuad(new Quad(128, 256, 32, 32, Textures.MAIN_TS.uvs(96, 384, 128, 416)));
-        staticBatch.tiledQuadBatch(new Vector2f(160,256), new Vector2f(3,1), new Vector2f(32, 32),
-                Textures.MAIN_TS.uvs(128, 384, 160, 416));
-
-        staticBatch.batchQuad(new Quad(256, 256, 32, 32, Textures.MAIN_TS.uvs(160, 384, 192, 416)));
+        staticBatch.tiledTileBatch(new Vector2f(0,-3), new Vector2f(1,7), 32);
+        staticBatch.tiledTileBatch(new Vector2f(60,-3), new Vector2f(1,7), 34);
 
 
+        staticBatch.tiledTileBatch(new Vector2f(1,-3), new Vector2f(59,7), 33);
 
         staticBatch.update();
         dynamicBatch.update();
         scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(60,4));
-        scene.addCollidersRect(new Vector2i(4,8), new Vector2i(8,8));
+
+        /*
+
+        scene.setLayer(0,staticBatch);
+        scene.loadInto(0,"level0/level0_static.csv");
+        scene.layerInCollisionMask("level0/
+
+         */
+
     } // Level creation
 }
