@@ -48,6 +48,12 @@ public class TestApp {
     public static void main(String[] args) {
 
         {
+
+//            try {
+//                System.in.read();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             startLoadTimer();
 
             WindowUtils.init();
@@ -56,6 +62,7 @@ public class TestApp {
             settings = new WindowSettings();
             settings.debugMode(true);
             settings.makeFullscreenSize();
+            settings.samples = 4;
             settings.profile(WindowSettings.GLProfile.CORE);
 
             // Window & Context Creation
@@ -70,6 +77,7 @@ public class TestApp {
             BackgroundColor = new Color(1, 1, 1, 1);
 
             Renderer.enableAlphaBlending();
+            Renderer.enableMultisample();
             Renderer.setBackgroundColor(BackgroundColor, true);
 
             // Shader Program
@@ -140,7 +148,6 @@ public class TestApp {
 
 
 
-
             // Clear Background
 
             Renderer.clearBackground();
@@ -169,7 +176,9 @@ public class TestApp {
         program.uniformMat4("mvp", camera.getProjection().mul(playerCharacter.getModelMatrix()));
         program.uniform1i("outline", 0);
         program.uniform1i("texture_", 0);
+        program.uniform1i("flipX",playerCharacter.direction);
         playerCharacter.render();
+        program.uniform1i("flipX",1);
         spriteVAO.unbind();
     }
 
@@ -224,31 +233,27 @@ public class TestApp {
         scene = new Scene(32,32);
 
         // Main Floor
-        staticBatch.batchTile(new Vector2f(0,4), 0);
-        staticBatch.batchTile(new Vector2f(0, -4), 64);
-        staticBatch.batchTile(new Vector2f(60, 4), 2);
-        staticBatch.batchTile(new Vector2f(60, -4), 66);
-
-        staticBatch.tiledTileBatch(new Vector2f(1,4),new Vector2f(59,1), 1);
-        staticBatch.tiledTileBatch(new Vector2f(1,-4),new Vector2f(59,1), 65);
-
-        staticBatch.tiledTileBatch(new Vector2f(0,-3), new Vector2f(1,7), 32);
-        staticBatch.tiledTileBatch(new Vector2f(60,-3), new Vector2f(1,7), 34);
-
-
-        staticBatch.tiledTileBatch(new Vector2f(1,-3), new Vector2f(59,7), 33);
-
-        staticBatch.update();
-        dynamicBatch.update();
-        scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(60,4));
-
-        /*
+//        staticBatch.batchTile(new Vector2f(0,4), 0);
+//        staticBatch.batchTile(new Vector2f(0, -4), 64);
+//        staticBatch.batchTile(new Vector2f(60, 4), 2);
+//        staticBatch.batchTile(new Vector2f(60, -4), 66);
+//
+//        staticBatch.tiledTileBatch(new Vector2f(1,4),new Vector2f(59,1), 1);
+//        staticBatch.tiledTileBatch(new Vector2f(1,-4),new Vector2f(59,1), 65);
+//
+//        staticBatch.tiledTileBatch(new Vector2f(0,-3), new Vector2f(1,7), 32);
+//        staticBatch.tiledTileBatch(new Vector2f(60,-3), new Vector2f(1,7), 34);
+//
+//
+//        staticBatch.tiledTileBatch(new Vector2f(1,-3), new Vector2f(59,7), 33);
+//
+//
+//        scene.addCollidersRect(new Vector2i(0,-4), new Vector2i(60,4));
 
         scene.setLayer(0,staticBatch);
-        scene.loadInto(0,"level0/level0_static.csv");
-        scene.layerInCollisionMask("level0/
-
-         */
-
+        scene.loadInto(0,"level0/level0_static.csv",0,0);
+        scene.addCollisionMaskFromRenderContent("level0/level0_static.csv",0,0);
+        staticBatch.update();
+        dynamicBatch.update();
     } // Level creation
 }

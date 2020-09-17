@@ -3,6 +3,7 @@ package org.delusion.engine.renderer.texture;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBImage;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -36,7 +37,7 @@ public class Texture2D {
 
     public static class TextureSettings {
         public int wrapMode = GL_REPEAT;
-        public int filter_mode_min = GL_NEAREST;
+        public int filter_mode_min = GL_LINEAR;
         public int filter_mode_mag = GL_NEAREST;
 
         public float[] borderColor = null;
@@ -46,7 +47,7 @@ public class Texture2D {
 
     public Texture2D(String s, TextureSettings settings) throws IOException {
         this.settings = settings;
-        byte[] data = Texture2D.class.getClassLoader().getResourceAsStream(s).readAllBytes();
+        byte[] data = IOUtils.toByteArray(Texture2D.class.getClassLoader().getResourceAsStream(s));
 
         loadFrom(data);
     }

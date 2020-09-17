@@ -21,7 +21,7 @@ public class Window {
 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
-        System.out.println(glfwGetVersionString());
+System.out.println(glfwGetVersionString());
 
 
         if (settings.isFullscreen()) {

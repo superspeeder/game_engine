@@ -24,6 +24,7 @@ public class Player extends Sprite implements CameraController, InputHandler {
     private Vector2f origin;
     private Vector2f delta = new Vector2f();
     private boolean onGround;
+    public int direction = 1;
 
     public Player(Vector4f startingUVs, Vector2f position) {
         super(position);
@@ -58,6 +59,12 @@ public class Player extends Sprite implements CameraController, InputHandler {
         delta.add(d);
     }
 
+
+    @Override
+    public void render() {
+
+        super.render();
+    }
 
     public void update(Scene scene, Camera camera) {
 
@@ -140,7 +147,11 @@ public class Player extends Sprite implements CameraController, InputHandler {
 
         camera.setPosition(new Vector2f(position).sub(origin).mul(-1));
         camera.update();
-
+        if (delta.x > 0) {
+            direction = 1;
+        } else if (delta.x < 0) {
+            direction = -1;
+        }
         delta.set(0,0);
 
     }

@@ -1,6 +1,9 @@
 package org.delusion.engine.scene;
 
 import org.delusion.engine.component.SceneComponent;
+import org.delusion.engine.renderer.batch.SceneBatch;
+import org.delusion.engine.resources.ResourceUtils;
+import org.delusion.engine.resources.loaders.CSVLoader;
 import org.joml.Rectanglef;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -17,6 +20,7 @@ public class Scene {
     private Map<Class<? extends SceneComponent>, List<SceneComponent>> components = new HashMap<>();
 
     private Map<Vector2i, Boolean> collisionTileMask = new HashMap<>();
+    private Map<Integer,SceneBatch> layers = new HashMap<>();
 
     public <T extends SceneComponent> void addComponent(T component) {
         @SuppressWarnings("unchecked")
@@ -42,7 +46,7 @@ public class Scene {
         for (int x = min.x; x <= max.x; x++) {
             for (int y = min.y; y <= max.y; y++) {
                 addCollider(x,y);
-                System.out.println(x + ", " + y);
+//System.out.println(x + ", " + y);
             }
         }
     }
@@ -162,5 +166,60 @@ public class Scene {
 
     public int getTY() {
         return ty;
+    }
+
+    public void setLayer(int id, SceneBatch batch) {
+        layers.put(id,batch);
+    }
+
+    private CSVLoader<Integer> layerLoader = new CSVLoader<>(Integer::parseInt);
+
+
+    public void loadInto(int layerID, String path, int x_off, int y_off) {
+        List<List<Integer>> layerData = layerLoader.readData("levels/" + path);
+        SceneBatch batch = layers.get(layerID);
+        int y = layerData.size() - 1;
+        for (List<Integer> row : layerData) {
+            int x = 0;
+            for (int id : row) {
+                if (id != -1) {
+                    batch.batchTile(new Vector2f(x+x_off,y+y_off),id);
+                }
+                x++;
+            }
+            y--;
+        }
+    }
+
+    public void addCollisionMask(String path, int x_off, int y_off) {
+        String[] lines = ResourceUtils.readString("levels/" + path).split("\n");
+
+        int y = lines.length - 1;
+        for (String line : lines) {
+            int x = 0;
+            for (char c : line.toCharArray()) {
+                if (c == '#') {
+                    this.collisionTileMask.put(new Vector2i(x + x_off, y + y_off),true);
+                }
+                x++;
+            }
+            y--;
+        }
+    }
+
+    public void addCollisionMaskFromRenderContent(String path, int x_off, int y_off) {
+        List<List<Integer>> layerData = layerLoader.readData("levels/" + path);
+        int y = layerData.size() - 1;
+        for (List<Integer> row : layerData) {
+            int x = 0;
+            for (int id : row) {
+                if (id != -1) {
+                    this.collisionTileMask.put(new Vector2i(x + x_off, y + y_off),true);
+                }
+                x++;
+            }
+            y--;
+        }
+
     }
 }

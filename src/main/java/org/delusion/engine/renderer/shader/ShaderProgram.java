@@ -20,7 +20,7 @@ public class ShaderProgram {
 
     public int readShaderFile(String path) throws IOException {
         String content = ResourceUtils.readString(path);
-        List<String> lines = content.lines().collect(Collectors.toList());
+        List<String> lines = Arrays.stream(content.split("\n")).collect(Collectors.toList());
         String line0 = lines.get(0);
         String line1 = lines.get(1);
         ShaderType type = ShaderType.from(line0);
@@ -41,13 +41,13 @@ public class ShaderProgram {
 
 
 
-        System.out.println("======================================");
-        System.out.println("Shader Type: " + type.name());
-        System.out.println("Shader Version: " + line1.substring(9).toUpperCase());
-        System.out.println("Compile Status: " + (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE ? true : false));
+System.out.println("======================================");
+System.out.println("Shader Type: " + type.name());
+System.out.println("Shader Version: " + line1.substring(9).toUpperCase());
+System.out.println("Compile Status: " + (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE ? true : false));
         String ilog = glGetShaderInfoLog(shader);
         if (!ilog.isEmpty())
-            System.out.println(ilog);
+System.out.println(ilog);
 
         return shader;
     }
@@ -76,28 +76,28 @@ public class ShaderProgram {
         int link_status = glGetProgrami(programID, GL_LINK_STATUS);
         
 
-        System.out.println("======================================");
-        System.out.println("Program ID: " + programID);
-        System.out.println("Link Status: " + (link_status == GL_TRUE ? true : false));
-        System.out.println("Attached Shader Count: " + attachedShaderCount);
-        System.out.println("Atomic Counter Buffer Count: " + atomicCounterBuffers);
-        System.out.println("Attribute Count: " + attributes);
-        System.out.println("Shader Count: " + shaderCount);
+System.out.println("======================================");
+System.out.println("Program ID: " + programID);
+System.out.println("Link Status: " + (link_status == GL_TRUE ? true : false));
+System.out.println("Attached Shader Count: " + attachedShaderCount);
+System.out.println("Atomic Counter Buffer Count: " + atomicCounterBuffers);
+System.out.println("Attribute Count: " + attributes);
+System.out.println("Shader Count: " + shaderCount);
         for (int i = 0; i < shaderCount; i++) {
             IntBuffer size = BufferUtils.createIntBuffer(1);
             IntBuffer type = BufferUtils.createIntBuffer(1);
 
             String name = glGetActiveUniform(programID, i, size, type);
-            System.out.println("--------------------------------------");
-            System.out.println("Uniform Name: " + name);
-            System.out.println("Uniform Type: " + getTypeString(type.get()));
+System.out.println("--------------------------------------");
+System.out.println("Uniform Name: " + name);
+System.out.println("Uniform Type: " + getTypeString(type.get()));
 
             uniformMap.put(name,i);
 
         }
-        System.out.println("======================================");
+System.out.println("======================================");
 
-        System.out.println(glGetProgramInfoLog(programID));
+System.out.println(glGetProgramInfoLog(programID));
     }
 
     private Map<String, Integer> uniformMap = new HashMap<>();

@@ -81,7 +81,7 @@ public class SceneBatch {
             int totalSize = 0;
             float[] verticies = new float[0];
 
-            for (BatchChunk chunk : List.copyOf(chunks)) {
+            for (BatchChunk chunk : new ArrayList<BatchChunk>(chunks)) {
                 if (chunk.isDirty()) {
                     chunk.clean();
                 }

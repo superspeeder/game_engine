@@ -67,6 +67,10 @@ public class Renderer {
 
     }
 
+    public static void enableMultisample() {
+        glEnable(GL_MULTISAMPLE);
+    }
+
     public static class SetupOut {
         public VertexBuffer vbo;
         public VertexArray vao;

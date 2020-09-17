@@ -9,6 +9,7 @@ out vec4 fragColor;
 uniform sampler2D texture_;
 
 uniform int outline;
+uniform int flipX;
 //uniform vec2 center;
 
 vec4 invertOrBlack(vec4 c) {
@@ -24,9 +25,15 @@ vec4 invertOrBlack(vec4 c) {
 }
 
 void main() {
+    vec2 uv_ = uv.xy;
+    if (flipX == -1) {
+        uv_.x = 1.0 - uv.x;
+        uv_.y = 1.0 - uv.y;
+    }
+
     if (outline == 0) {
-        fragColor = texture(texture_, uv);
+        fragColor = texture(texture_, uv_);
     } else {
-        fragColor = invertOrBlack(texture(texture_, uv));
+        fragColor = invertOrBlack(texture(texture_, uv_));
     }
 }
